@@ -59,6 +59,16 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.8.4")
+    implementation("io.github.jan-tennert.supabase:storage-kt:2.8.4")
+    implementation("io.github.jan-tennert.supabase:realtime-kt:2.8.4")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
 }
