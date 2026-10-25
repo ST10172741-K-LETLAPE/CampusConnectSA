@@ -1196,71 +1196,200 @@ fun CampusServicesScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(CampusBackground)
+            .background(Color.White)
             .padding(16.dp)
     ) {
         item {
-            Text(
-                text = "CAMPUS SERVICES",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-        if (services.isEmpty()) {
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(
-                        Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Library - Open from 08:00 - Study spaces",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
-                        Text(
-                            text = "Computer Labs - IT Hub available - Building B",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = "Cafeteria - Open now - Breakfast & Lunch",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = "Student Support - Counselling - Academic help",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = CampusBlue
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "CAMPUS SERVICES",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color(0xFF1E3A8A)
+                )
             }
-        } else {
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Card(
+                    shape = RoundedCornerShape(6.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = CampusBlue
+                    )
+                ) {
+                    Text(
+                        text = "CC",
+                        color = Color.White,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(
+                            horizontal = 6.dp,
+                            vertical = 2.dp
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "CampusConnect SA",
+                    fontSize = 11.sp,
+                    color = Color.Gray
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                placeholder = {
+                    Text(
+                        text = "Search services...",
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = null,
+                        tint = Color.Gray,
+                        modifier = Modifier.size(18.dp)
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "SERVICES",
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        // Figma static list matching screenshot
+        item {
+            CampusServiceCard(
+                icon = "📚",
+                title = "Library",
+                subtitle = "Open 8am-10pm - Study spaces"
+            )
+            CampusServiceCard(
+                icon = "💻",
+                title = "Computer Labs",
+                subtitle = "12 workstations available - Building B"
+            )
+            CampusServiceCard(
+                icon = "🍽️",
+                title = "Cafeteria",
+                subtitle = "Open now - Breakfast & Lunch"
+            )
+            CampusServiceCard(
+                icon = "🎧",
+                title = "Student Support",
+                subtitle = "Counselling - Academic help"
+            )
+            CampusServiceCard(
+                icon = "🚌",
+                title = "Campus Transport",
+                subtitle = "Next shuttle: 5 min - Routes"
+            )
+            CampusServiceCard(
+                icon = "🛡️",
+                title = "Campus Security",
+                subtitle = "24/7 - Emergency: 10111"
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // If Firestore has services, show them too
+            if (services.isNotEmpty()) {
+                Text(
+                    text = "Live from Firestore NoSQL (${services.size})",
+                    fontSize = 10.sp,
+                    color = CampusBlue,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Purpose: Provides information about useful campus services.",
+                fontSize = 10.sp,
+                color = CampusBlue,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        if (services.isNotEmpty()) {
             items(services) { s ->
                 Card(
                     shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFF8FAFC)
+                    ),
+                    elevation = CardDefaults.cardElevation(1.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 6.dp)
+                        .padding(vertical = 4.dp)
                 ) {
-                    Column(
-                        Modifier.padding(12.dp)
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = s.service_name,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "📍 ${s.service_location}",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = s.description,
-                            fontSize = 11.sp
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .background(
+                                    Color(0xFFDBEAFE),
+                                    RoundedCornerShape(8.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = "📍", fontSize = 16.sp)
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = s.service_name,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp
+                            )
+                            Text(
+                                text = s.description,
+                                fontSize = 11.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = s.service_location,
+                                fontSize = 10.sp,
+                                color = Color.Gray
+                            )
+                        }
+                        Icon(
+                            Icons.Default.ChevronRight,
+                            contentDescription = null,
+                            tint = Color.Gray
                         )
                     }
                 }
@@ -1268,6 +1397,78 @@ fun CampusServicesScreen(
         }
     }
 }
+
+@Composable
+fun CampusServiceCard(
+    icon: String,
+    title: String,
+    subtitle: String
+) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(2.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .height(36.dp)
+                    .background(
+                        CampusBlue,
+                        RoundedCornerShape(2.dp)
+                    )
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(
+                        Color(0xFFDBEAFE),
+                        RoundedCornerShape(8.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = icon,
+                    fontSize = 16.sp
+                )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp
+                )
+                Text(
+                    text = subtitle,
+                    fontSize = 11.sp,
+                    color = Color.Gray
+                )
+            }
+            Icon(
+                Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = Color.Gray,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+    }
+}
+
 
 @Composable
 fun AnnouncementsScreen(
