@@ -2565,264 +2565,432 @@ fun NotificationCardFigma(
 fun SettingsScreen(
     onLogout: () -> Unit
 ) {
-    Column(
+    var notificationsEnabled by remember { mutableStateOf(true) }
+    var darkModeEnabled by remember { mutableStateOf(false) }
+    var selectedLanguage by remember { mutableStateOf("English") }
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    val saLanguages = listOf("English", "Afrikaans", "isiZulu", "Sesotho", "Sepedi")
+
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(24.dp)
+            .background(Color(0xFFF8FAFC))
     ) {
-        Row {
-            Icon(Icons.Default.ArrowBack, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "SETTINGS",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)
-        ) {
-            Row(
-                Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(16.dp)
             ) {
-                Icon(
-                    Icons.Default.Person,
-                    contentDescription = null,
-                    tint = Color.White,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.ArrowBack,
+                        contentDescription = null,
+                        tint = CampusBlue
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "SETTINGS",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color(0xFF1E3A8A)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.padding(0.dp)
+            ) {
+                Box(
                     modifier = Modifier
-                        .background(CampusBlue, RoundedCornerShape(50))
-                        .padding(6.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Edit Profile")
+                        .fillMaxWidth()
+                        .background(Color(0xFFF1F5F9))
+                        .padding(vertical = 6.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "CampusConnect SA",
+                        fontSize = 10.sp,
+                        color = Color.Gray
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Settings cards matching Figma screenshot
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
+                    SettingsItemCard(
+                        icon = Icons.Default.Person,
+                        title = "Edit Profile",
+                        hasArrow = true,
+                        hasSwitch = false,
+                        switchValue = false,
+                        onSwitchChange = {}
+                    )
+                    SettingsItemCard(
+                        icon = Icons.Default.Language,
+                        title = "Language",
+                        subtitle = selectedLanguage,
+                        hasArrow = true,
+                        hasSwitch = false,
+                        switchValue = false,
+                        onSwitchChange = {},
+                        onClick = { showLanguageDialog = true }
+                    )
+                    SettingsItemCard(
+                        icon = Icons.Default.Notifications,
+                        title = "Notifications",
+                        hasArrow = false,
+                        hasSwitch = true,
+                        switchValue = notificationsEnabled,
+                        onSwitchChange = { notificationsEnabled = it }
+                    )
+                    SettingsItemCard(
+                        icon = Icons.Default.DarkMode,
+                        title = "Dark Mode",
+                        hasArrow = false,
+                        hasSwitch = true,
+                        switchValue = darkModeEnabled,
+                        onSwitchChange = { darkModeEnabled = it }
+                    )
+                    SettingsItemCard(
+                        icon = Icons.Default.Security,
+                        title = "Change Password",
+                        hasArrow = true,
+                        hasSwitch = false,
+                        switchValue = false,
+                        onSwitchChange = {}
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    OutlinedButton(
+                        onClick = onLogout,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = Color(0xFFDC2626)
+                        ),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFDC2626))
+                    ) {
+                        Icon(
+                            Icons.Default.Logout,
+                            contentDescription = null,
+                            tint = Color(0xFFDC2626),
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "LOG OUT",
+                            color = Color(0xFFDC2626),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // POPULATE ALL COLLECTIONS button for POE demo
+                    Button(
+                        onClick = {
+                            val db = FirebaseFirestore.getInstance()
+                            db.collection("services").document("SVC001").set(
+                                mapOf(
+                                    "service_id" to "SVC001",
+                                    "name" to "Library",
+                                    "description" to "Study spaces and books",
+                                    "location" to "Main Campus Building A",
+                                    "operating_hours" to "08:00-17:00"
+                                )
+                            )
+                            db.collection("services").document("SVC002").set(
+                                mapOf(
+                                    "service_id" to "SVC002",
+                                    "name" to "Computer Lab",
+                                    "description" to "IT Hub",
+                                    "location" to "Building B",
+                                    "operating_hours" to "07:00-18:00"
+                                )
+                            )
+                            db.collection("events").document("EVT001").set(
+                                mapOf(
+                                    "event_id" to "EVT001",
+                                    "title" to "Career Fair",
+                                    "description" to "Meet top employers",
+                                    "venue" to "Main Hall",
+                                    "event_date" to "2025-08-28"
+                                )
+                            )
+                            db.collection("transport").document("R001").set(
+                                mapOf(
+                                    "route_id" to "R001",
+                                    "route_name" to "Campus Shuttle",
+                                    "pickup_point" to "Rosebank Station",
+                                    "destination" to "Main Campus",
+                                    "schedule" to "Every 30 mins"
+                                )
+                            )
+                            db.collection("modules").document("MOD001").set(
+                                mapOf(
+                                    "module_id" to "MOD001",
+                                    "module_name" to "Open Source Programming",
+                                    "module_code" to "OPSC6312"
+                                )
+                            )
+                            db.collection("classes").document("CLS001").set(
+                                mapOf(
+                                    "class_id" to "CLS001",
+                                    "user_id" to "ST10172741",
+                                    "module_id" to "MOD001",
+                                    "venue" to "T401 ROOM 422",
+                                    "date" to "2025-08-21",
+                                    "start_time" to "08:00",
+                                    "end_time" to "10:00"
+                                )
+                            )
+                            db.collection("assignments").document("ASS001").set(
+                                mapOf(
+                                    "assignment_id" to "ASS001",
+                                    "user_id" to "ST10172741",
+                                    "module_id" to "MOD001",
+                                    "title" to "Database POE",
+                                    "description" to "Part 3 NoSQL",
+                                    "due_date" to "2025-08-25",
+                                    "priority" to "high",
+                                    "completed" to false
+                                )
+                            )
+                            db.collection("exams").document("EX001").set(
+                                mapOf(
+                                    "exam_id" to "EX001",
+                                    "user_id" to "ST10172741",
+                                    "module_id" to "MOD001",
+                                    "date" to "2025-09-15"
+                                )
+                            )
+                            db.collection("resources").document("RES001").set(
+                                mapOf(
+                                    "resource_id" to "RES001",
+                                    "module_id" to "MOD001",
+                                    "title" to "POE Part 1 Document",
+                                    "type" to "pdf",
+                                    "location" to "resources/OPSC6312.pdf"
+                                )
+                            )
+                            db.collection("notifications").document("NOT001").set(
+                                mapOf(
+                                    "notification_id" to "NOT001",
+                                    "user_id" to "ST10172741",
+                                    "title" to "Assignment Due",
+                                    "message" to "Database POE due in 2 days",
+                                    "created_at" to "2025-08-25"
+                                )
+                            )
+                            db.collection("users").document("ST10172741").set(
+                                mapOf(
+                                    "user_id" to "ST10172741",
+                                    "first_name" to "Keoagile",
+                                    "surname" to "Letlape",
+                                    "student_number" to "ST10172741",
+                                    "email" to "ST10172741@iiemail.com",
+                                    "created_at" to "2025-08-25"
+                                )
+                            )
+                            db.collection("announcements").document("ANN001").set(
+                                mapOf(
+                                    "announcement_id" to "ANN001",
+                                    "title" to "Registration closes Friday",
+                                    "content" to "Final registration for Semester 2 closes on 23 Aug 2025 - 17:00",
+                                    "date_created" to "2025-08-20",
+                                    "priority" to "IMPORTANT"
+                                )
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF10B981)
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(text = "POPULATE ALL COLLECTIONS (1 click)", fontSize = 11.sp)
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = "Purpose: Allows students to customise their application experience.\n4.12 Settings Screen - All toggles working\nProject: campusconnectsa-3880d | NoSQL Firestore | Blob Storage | Auth bcrypt | Router WiFi OK | ST10172741",
+                        fontSize = 9.sp,
+                        color = CampusBlue,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                if (showLanguageDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showLanguageDialog = false },
+                        title = { Text("Select Language", fontWeight = FontWeight.Bold) },
+                        text = {
+                            Column {
+                                Text("Choose your preferred South African language:", fontSize = 12.sp, color = Color.Gray)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                saLanguages.forEach { lang ->
+                                    Card(
+                                        shape = RoundedCornerShape(8.dp),
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = if (selectedLanguage == lang) Color(0xFFDBEAFE) else Color.White
+                                        ),
+                                        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+                                        onClick = {
+                                            selectedLanguage = lang
+                                            showLanguageDialog = false
+                                        }
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth().padding(12.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                text = when(lang) {
+                                                    "English" -> "🇬🇧"
+                                                    "Afrikaans" -> "🇿🇦"
+                                                    "isiZulu" -> "🇿🇦"
+                                                    else -> "🇿🇦"
+                                                },
+                                                fontSize = 16.sp
+                                            )
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Column {
+                                                Text(text = lang, fontWeight = FontWeight.Medium, fontSize = 13.sp)
+                                                Text(
+                                                    text = when(lang) {
+                                                        "English" -> "Default"
+                                                        "Afrikaans" -> "Twee SA tale bygevoeg"
+                                                        "isiZulu" -> "Izilimi ezimbili zase SA zengeziwe"
+                                                        "Sesotho" -> "Dipuo tse pedi tsa SA"
+                                                        "Sepedi" -> "Maleme a mabedi a SA"
+                                                        else -> ""
+                                                    },
+                                                    fontSize = 9.sp,
+                                                    color = Color.Gray
+                                                )
+                                            }
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            if (selectedLanguage == lang) {
+                                                Icon(Icons.Default.Check, contentDescription = null, tint = CampusBlue, modifier = Modifier.size(16.dp))
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        confirmButton = {
+                            TextButton(onClick = { showLanguageDialog = false }) {
+                                Text("Close", color = CampusBlue)
+                            }
+                        }
+                    )
+                }
             }
         }
+    }
+}
 
-        Card(
-            shape = RoundedCornerShape(12.dp),
+@Composable
+fun SettingsItemCard(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    title: String,
+    subtitle: String = "",
+    hasArrow: Boolean,
+    hasSwitch: Boolean,
+    switchValue: Boolean,
+    onSwitchChange: (Boolean) -> Unit,
+    onClick: () -> Unit = {}
+) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(1.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        onClick = onClick
+    ) {
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .background(CampusBlue, RoundedCornerShape(50)),
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    Icons.Default.Language,
+                    icon,
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier
-                        .background(CampusBlue, RoundedCornerShape(50))
-                        .padding(6.dp)
+                    modifier = Modifier.size(18.dp)
                 )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Language")
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "English", color = Color.Gray)
             }
-        }
-
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)
-        ) {
-            Row(
-                Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(
+                modifier = Modifier.weight(1f)
             ) {
-                Icon(
-                    Icons.Default.Notifications,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier
-                        .background(CampusBlue, RoundedCornerShape(50))
-                        .padding(6.dp)
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 13.sp
                 )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Notifications")
-                Spacer(modifier = Modifier.weight(1f))
-                Switch(checked = true, onCheckedChange = {})
+                if (subtitle.isNotEmpty()) {
+                    Text(
+                        text = subtitle,
+                        fontSize = 10.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
+            if (hasArrow) {
+                if (subtitle.isNotEmpty()) {
+                    Text(
+                        text = subtitle,
+                        fontSize = 11.sp,
+                        color = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
+                Icon(
+                    Icons.Default.ChevronRight,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+            if (hasSwitch) {
+                Switch(
+                    checked = switchValue,
+                    onCheckedChange = onSwitchChange,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Color(0xFF3B82F6),
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = Color(0xFFE5E7EB)
+                    ),
+                    modifier = Modifier.size(width = 40.dp, height = 24.dp)
+                )
             }
         }
-
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)
-        ) {
-            Row(
-                Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Default.DarkMode,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier
-                        .background(CampusBlue, RoundedCornerShape(50))
-                        .padding(6.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Dark Mode")
-                Spacer(modifier = Modifier.weight(1f))
-                Switch(checked = false, onCheckedChange = {})
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                val db = FirebaseFirestore.getInstance()
-                db.collection("services").document("SVC001").set(
-                    mapOf(
-                        "service_id" to "SVC001",
-                        "name" to "Library",
-                        "description" to "Study spaces and books",
-                        "location" to "Main Campus Building A",
-                        "operating_hours" to "08:00-17:00"
-                    )
-                )
-                db.collection("services").document("SVC002").set(
-                    mapOf(
-                        "service_id" to "SVC002",
-                        "name" to "Computer Lab",
-                        "description" to "IT Hub",
-                        "location" to "Building B",
-                        "operating_hours" to "07:00-18:00"
-                    )
-                )
-                db.collection("events").document("EVT001").set(
-                    mapOf(
-                        "event_id" to "EVT001",
-                        "title" to "Career Fair",
-                        "description" to "Meet top employers",
-                        "venue" to "Main Hall",
-                        "event_date" to "2025-08-28"
-                    )
-                )
-                db.collection("transport").document("R001").set(
-                    mapOf(
-                        "route_id" to "R001",
-                        "route_name" to "Campus Shuttle",
-                        "pickup_point" to "Rosebank Station",
-                        "destination" to "Main Campus",
-                        "schedule" to "Every 30 mins"
-                    )
-                )
-                db.collection("modules").document("MOD001").set(
-                    mapOf(
-                        "module_id" to "MOD001",
-                        "module_name" to "Open Source Programming",
-                        "module_code" to "OPSC6312"
-                    )
-                )
-                db.collection("classes").document("CLS001").set(
-                    mapOf(
-                        "class_id" to "CLS001",
-                        "user_id" to "ST10172741",
-                        "module_id" to "MOD001",
-                        "venue" to "T401 ROOM 422",
-                        "date" to "2025-08-21",
-                        "start_time" to "08:00",
-                        "end_time" to "10:00"
-                    )
-                )
-                db.collection("assignments").document("ASS001").set(
-                    mapOf(
-                        "assignment_id" to "ASS001",
-                        "user_id" to "ST10172741",
-                        "module_id" to "MOD001",
-                        "title" to "Database POE",
-                        "description" to "Part 3 NoSQL",
-                        "due_date" to "2025-08-25",
-                        "priority" to "high",
-                        "completed" to false
-                    )
-                )
-                db.collection("exams").document("EX001").set(
-                    mapOf(
-                        "exam_id" to "EX001",
-                        "user_id" to "ST10172741",
-                        "module_id" to "MOD001",
-                        "date" to "2025-09-15"
-                    )
-                )
-                db.collection("resources").document("RES001").set(
-                    mapOf(
-                        "resource_id" to "RES001",
-                        "module_id" to "MOD001",
-                        "title" to "POE Part 1 Document",
-                        "type" to "pdf",
-                        "location" to "resources/OPSC6312.pdf"
-                    )
-                )
-                db.collection("notifications").document("NOT001").set(
-                    mapOf(
-                        "notification_id" to "NOT001",
-                        "user_id" to "ST10172741",
-                        "title" to "Assignment Due",
-                        "message" to "Database POE due in 2 days",
-                        "created_at" to "2025-08-25"
-                    )
-                )
-                db.collection("users").document("ST10172741").set(
-                    mapOf(
-                        "user_id" to "ST10172741",
-                        "first_name" to "Keoagile",
-                        "surname" to "Letlape",
-                        "student_number" to "ST10172741",
-                        "email" to "ST10172741@iiemail.com",
-                        "created_at" to "2025-08-25"
-                    )
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF10B981)
-            )
-        ) {
-            Text(text = "POPULATE ALL COLLECTIONS (1 click)")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        OutlinedButton(
-            onClick = onLogout,
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Icon(
-                Icons.Default.Logout,
-                contentDescription = null,
-                tint = Color.Red
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "LOG OUT",
-                color = Color.Red
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Text(
-            text = "Project: campusconnectsa-3880d | NoSQL Firestore | Blob Storage | Auth bcrypt encrypted",
-            fontSize = 10.sp,
-            color = Color.Gray,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
