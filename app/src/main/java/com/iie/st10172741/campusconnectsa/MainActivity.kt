@@ -701,153 +701,365 @@ fun HomeDashboardScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(CampusBackground)
-            .padding(16.dp)
+            .background(Color(0xFFF8FAFC))
     ) {
         item {
-            Text(
-                text = "Good Morning, Student",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-            Text(
-                text = "Monday, 21 Aug - Week 7 of Semester",
-                color = Color.Gray,
-                fontSize = 12.sp
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        item {
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                ),
-                elevation = CardDefaults.cardElevation(4.dp),
+            // Header
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp)
+                    .background(Color.White)
+                    .padding(16.dp)
             ) {
-                Column(
-                    Modifier.padding(16.dp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top
                 ) {
-                    Text(
-                        text = "TODAY",
-                        color = CampusBlue,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Programming",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "12:00 • T401 • ROOM 422",
-                        fontSize = 11.sp,
-                        color = Color.Gray
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Card(
+                            shape = RoundedCornerShape(6.dp),
+                            colors = CardDefaults.cardColors(containerColor = CampusBlue)
+                        ) {
+                            Text(
+                                text = "CC",
+                                color = Color.White,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Column {
+                            Text(
+                                text = "CampusConnect SA",
+                                fontSize = 10.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = "Good Morning, Student",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp,
+                                color = Color.Black
+                            )
+                            Text(
+                                text = "Monday, 26 Aug - Week 7 of Semester",
+                                fontSize = 10.sp,
+                                color = Color.Gray
+                            )
+                        }
+                    }
+                    Row {
+                        Icon(
+                            Icons.Default.Search,
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            Icons.Default.Notifications,
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
                 }
             }
 
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                ),
-                elevation = CardDefaults.cardElevation(4.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp)
+            Column(
+                modifier = Modifier.padding(16.dp)
             ) {
-                Column(
-                    Modifier.padding(16.dp)
+                // NEXT CLASS - Blue
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(2.dp),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
                 ) {
-                    Text(
-                        text = "UPCOMING ASSIGNMENT",
-                        color = Color(0xFFF59E0B),
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Database POE",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Due in 2 days - Stay on IT",
-                        fontSize = 11.sp,
-                        color = Color.Gray
-                    )
+                    Column(
+                        Modifier.padding(12.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Card(
+                                shape = RoundedCornerShape(4.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFDBEAFE))
+                            ) {
+                                Text(
+                                    text = "NEXT CLASS",
+                                    fontSize = 8.sp,
+                                    color = CampusBlue,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            Icon(
+                                Icons.Default.ChevronRight,
+                                contentDescription = null,
+                                tint = Color.Gray,
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .background(Color(0xFFDBEAFE), RoundedCornerShape(50)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.MenuBook,
+                                    contentDescription = null,
+                                    tint = CampusBlue,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column {
+                                Text(
+                                    text = "Programming",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 13.sp
+                                )
+                                Text(
+                                    text = "10:20 - 11:00 • A022",
+                                    fontSize = 10.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                        }
+                    }
                 }
-            }
 
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                ),
-                elevation = CardDefaults.cardElevation(4.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp)
-            ) {
-                Column(
-                    Modifier.padding(16.dp)
+                // UPCOMING ASSIGNMENT - Orange
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(2.dp),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
                 ) {
-                    Text(
-                        text = "NEXT EXAM",
-                        color = Color.Red,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Database Systems",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "15 Sept 09:00",
-                        fontSize = 11.sp,
-                        color = Color.Gray
-                    )
+                    Column(
+                        Modifier.padding(12.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Card(
+                                shape = RoundedCornerShape(4.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFFEF3C7))
+                            ) {
+                                Text(
+                                    text = "UPCOMING ASSIGNMENT",
+                                    fontSize = 8.sp,
+                                    color = Color(0xFFF59E0B),
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .background(Color(0xFFFEF3C7), RoundedCornerShape(50)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.Assignment,
+                                    contentDescription = null,
+                                    tint = Color(0xFFF59E0B),
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    text = "Database POE",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 13.sp
+                                )
+                                Text(
+                                    text = "Due in 2 days",
+                                    fontSize = 10.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                            Card(
+                                shape = RoundedCornerShape(12.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFFEF3C7))
+                            ) {
+                                Text(
+                                    text = "2 days left",
+                                    fontSize = 8.sp,
+                                    color = Color(0xFFF59E0B),
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                                )
+                            }
+                        }
+                    }
                 }
-            }
 
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                ),
-                elevation = CardDefaults.cardElevation(4.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    Modifier.padding(16.dp)
+                // NEXT EXAM - Blue
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(2.dp),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
                 ) {
-                    Text(
-                        text = "CAMPUS NEWS",
-                        color = Color.Gray,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Registration closes soon",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Final registration for Semester 2 closes on 21 Aug 2025 17:00",
-                        fontSize = 11.sp,
-                        color = Color.Gray
-                    )
+                    Column(
+                        Modifier.padding(12.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Card(
+                                shape = RoundedCornerShape(4.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFDBEAFE))
+                            ) {
+                                Text(
+                                    text = "NEXT EXAM",
+                                    fontSize = 8.sp,
+                                    color = CampusBlue,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .background(Color(0xFFDBEAFE), RoundedCornerShape(50)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.School,
+                                    contentDescription = null,
+                                    tint = CampusBlue,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    text = "Database Systems",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 13.sp
+                                )
+                                Text(
+                                    text = "14 Days Left",
+                                    fontSize = 10.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                            Card(
+                                shape = RoundedCornerShape(12.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFDBEAFE))
+                            ) {
+                                Text(
+                                    text = "14d",
+                                    fontSize = 8.sp,
+                                    color = CampusBlue,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
                 }
+
+                // CAMPUS NEWS
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(2.dp),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
+                ) {
+                    Column(
+                        Modifier.padding(12.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Card(
+                                shape = RoundedCornerShape(4.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFF1F5F9))
+                            ) {
+                                Text(
+                                    text = "CAMPUS NEWS",
+                                    fontSize = 8.sp,
+                                    color = Color.Gray,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .background(Color(0xFFF1F5F9), RoundedCornerShape(50)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(text = "📰", fontSize = 14.sp)
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    text = "Registration closes soon",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 13.sp
+                                )
+                                Text(
+                                    text = "Final registration for Semester 2 closes on\n21 Aug 2025 17:00",
+                                    fontSize = 9.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Read more →",
+                            fontSize = 9.sp,
+                            color = CampusBlue,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "✅ CONNECTED TO FIREBASE FIRESTORE NoSQL | ${announcements.size} announcements | Blob Storage Ready | Auth bcrypt\nPurpose: The dashboard provides the student's most important information at a glance.\n4.4 Home Dashboard - Firestore: announcements, assignments, exams, events",
+                    fontSize = 9.sp,
+                    color = CampusBlue,
+                    fontWeight = FontWeight.Medium
+                )
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "✅ CONNECTED TO FIREBASE FIRESTORE NoSQL | ${announcements.size} announcements | Blob Storage Ready",
-                fontSize = 10.sp,
-                color = CampusBlue,
-                modifier = Modifier.padding(top = 8.dp)
-            )
         }
     }
 }
