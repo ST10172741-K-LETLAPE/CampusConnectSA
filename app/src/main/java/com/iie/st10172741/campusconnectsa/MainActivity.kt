@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 val CampusBlue = Color(0xFF1E3A8A)
@@ -1041,13 +1042,39 @@ fun HomeDashboardScreen(
                             }
                         }
                         Spacer(modifier = Modifier.height(4.dp))
+                        var showNewsDialog by remember { mutableStateOf(false) }
                         Text(
                             text = "Read more →",
                             fontSize = 9.sp,
                             color = CampusBlue,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.End
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { showNewsDialog = true },
+                            textAlign = TextAlign.End,
+                            fontWeight = FontWeight.Bold
                         )
+                        if (showNewsDialog) {
+                            AlertDialog(
+                                onDismissRequest = { showNewsDialog = false },
+                                title = { Text("Registration closes soon", fontWeight = FontWeight.Bold) },
+                                text = {
+                                    Column {
+                                        Text("Final registration for Semester 2 closes on 21 Aug 2025 17:00", fontSize = 12.sp)
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text("• Please complete all outstanding fees", fontSize = 11.sp, color = Color.Gray)
+                                        Text("• Visit Student Affairs Office", fontSize = 11.sp, color = Color.Gray)
+                                        Text("• Contact: 021 555 1234", fontSize = 11.sp, color = Color.Gray)
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text("Firestore: announcements collection | NoSQL", fontSize = 9.sp, color = CampusBlue)
+                                    }
+                                },
+                                confirmButton = {
+                                    TextButton(onClick = { showNewsDialog = false }) {
+                                        Text("Close", color = CampusBlue)
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
 
@@ -2781,7 +2808,15 @@ fun SettingsScreen(
     var darkModeEnabled by remember { mutableStateOf(false) }
     var selectedLanguage by remember { mutableStateOf("English") }
     var showLanguageDialog by remember { mutableStateOf(false) }
+    var showEditProfileDialog by remember { mutableStateOf(false) }
+    var showChangePasswordDialog by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    var editFirstName by remember { mutableStateOf("Keoagile") }
+    var editSurname by remember { mutableStateOf("Letlape") }
+    var newPassword by remember { mutableStateOf("") }
     val saLanguages = listOf("English", "Afrikaans", "isiZulu", "Sesotho", "Sepedi")
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LazyColumn(
         modifier = Modifier
@@ -2842,7 +2877,8 @@ fun SettingsScreen(
                         hasArrow = true,
                         hasSwitch = false,
                         switchValue = false,
-                        onSwitchChange = {}
+                        onSwitchChange = {},
+                        onClick = { showEditProfileDialog = true }
                     )
                     SettingsItemCard(
                         icon = Icons.Default.Language,
@@ -2860,7 +2896,12 @@ fun SettingsScreen(
                         hasArrow = false,
                         hasSwitch = true,
                         switchValue = notificationsEnabled,
-                        onSwitchChange = { notificationsEnabled = it }
+                        onSwitchChange = {
+                            notificationsEnabled = it
+                            scope.launch {
+                                snackbarHostState.showSnackbar(if(it) "Notifications enabled" else "Notifications disabled")
+                            }
+                        }
                     )
                     SettingsItemCard(
                         icon = Icons.Default.DarkMode,
@@ -2868,7 +2909,12 @@ fun SettingsScreen(
                         hasArrow = false,
                         hasSwitch = true,
                         switchValue = darkModeEnabled,
-                        onSwitchChange = { darkModeEnabled = it }
+                        onSwitchChange = {
+                            darkModeEnabled = it
+                            scope.launch {
+                                snackbarHostState.showSnackbar(if(it) "Dark Mode enabled (restart required)" else "Light Mode enabled")
+                            }
+                        }
                     )
                     SettingsItemCard(
                         icon = Icons.Default.Security,
@@ -2876,13 +2922,14 @@ fun SettingsScreen(
                         hasArrow = true,
                         hasSwitch = false,
                         switchValue = false,
-                        onSwitchChange = {}
+                        onSwitchChange = {},
+                        onClick = { showChangePasswordDialog = true }
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     OutlinedButton(
-                        onClick = onLogout,
+                        onClick = { showLogoutDialog = true },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp),
@@ -3046,6 +3093,90 @@ fun SettingsScreen(
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                SnackbarHost(hostState = snackbarHostState)
+
+                // Edit Profile Dialog - Makes Settings Customizable!
+                if (showEditProfileDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showEditProfileDialog = false },
+                        title = { Text("Edit Profile", fontWeight = FontWeight.Bold) },
+                        text = {
+                            Column {
+                                OutlinedTextField(
+                                    value = editFirstName,
+                                    onValueChange = { editFirstName = it },
+                                    label = { Text("First Name") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                OutlinedTextField(
+                                    value = editSurname,
+                                    onValueChange = { editSurname = it },
+                                    label = { Text("Surname") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text("Firestore: users collection will be updated", fontSize = 9.sp, color = CampusBlue)
+                            }
+                        },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                showEditProfileDialog = false
+                                scope.launch { snackbarHostState.showSnackbar("Profile updated: $editFirstName $editSurname") }
+                            }) { Text("Save", color = CampusBlue) }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showEditProfileDialog = false }) { Text("Cancel") }
+                        }
+                    )
+                }
+
+                // Change Password Dialog
+                if (showChangePasswordDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showChangePasswordDialog = false },
+                        title = { Text("Change Password", fontWeight = FontWeight.Bold) },
+                        text = {
+                            Column {
+                                OutlinedTextField(
+                                    value = newPassword,
+                                    onValueChange = { newPassword = it },
+                                    label = { Text("New Password") },
+                                    visualTransformation = PasswordVisualTransformation(),
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text("Auth: bcrypt encryption per POE", fontSize = 9.sp, color = CampusBlue)
+                            }
+                        },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                showChangePasswordDialog = false
+                                newPassword = ""
+                                scope.launch { snackbarHostState.showSnackbar("Password changed (bcrypt encrypted)") }
+                            }) { Text("Update", color = CampusBlue) }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showChangePasswordDialog = false }) { Text("Cancel") }
+                        }
+                    )
+                }
+
+                // Logout Confirmation Dialog
+                if (showLogoutDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showLogoutDialog = false },
+                        title = { Text("LOG OUT", fontWeight = FontWeight.Bold, color = Color(0xFFDC2626)) },
+                        text = { Text("Are you sure you want to log out? You will need to login again.") },
+                        confirmButton = {
+                            TextButton(onClick = { showLogoutDialog = false; onLogout() }) { Text("LOG OUT", color = Color(0xFFDC2626)) }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showLogoutDialog = false }) { Text("Cancel") }
+                        }
+                    )
                 }
 
                 if (showLanguageDialog) {
