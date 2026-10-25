@@ -218,12 +218,12 @@ fun MainAppWithBottomNav(onLogout: () -> Unit) {
 
     LaunchedEffect(selectedTab) {
         try {
-            val annSnap = db.collection("announcements").orderBy("date", Query.Direction.DESCENDING).get().await()
+            val annSnap = db.collection("announcements").get().await()
             val srvSnap = db.collection("campus_services").get().await()
             val evSnap = db.collection("events").get().await()
-            announcements = annSnap.documents.mapNotNull { d -> Announcement(title = d.getString("title") ?: "", content = d.getString("content") ?: d.getString("description") ?: "", category = d.getString("category") ?: "General", date = d.getString("date") ?: "") }
-            services = srvSnap.documents.mapNotNull { d -> CampusService(d.getString("service_name") ?: d.getString("name") ?: "", d.getString("service_location") ?: "", d.getString("description") ?: "") }
-            events = evSnap.documents.mapNotNull { d -> CampusEvent(d.getString("name") ?: "", d.getString("event_date") ?: "", d.getString("location") ?: "") }
+            announcements = annSnap.documents.mapNotNull { d -> Announcement(title = d.getString("title") ?: "", content = d.getString("content") ?: "") }
+            services = srvSnap.documents.mapNotNull { d -> CampusService(service_name = d.getString("service_name") ?: d.getString("name") ?: "", service_location = d.getString("service_location") ?: "", description = d.getString("description") ?: "") }
+            events = evSnap.documents.mapNotNull { d -> CampusEvent(name = d.getString("name") ?: "", event_date = d.getString("event_date") ?: "", location = d.getString("location") ?: "") }
         } catch (e: Exception) { }
     }
 
@@ -401,6 +401,27 @@ fun SettingsScreen(onLogout: () -> Unit) {
         Card(shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) { Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) { Icon(Icons.Default.Notifications, null, tint = Color.White, modifier = Modifier.background(CampusBlue, RoundedCornerShape(50)).padding(6.dp)); Spacer(Modifier.width(12.dp)); Text("Notifications"); Spacer(Modifier.weight(1f)); Switch(checked = true, onCheckedChange = {}) } }
         Card(shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) { Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) { Icon(Icons.Default.DarkMode, null, tint = Color.White, modifier = Modifier.background(CampusBlue, RoundedCornerShape(50)).padding(6.dp)); Spacer(Modifier.width(12.dp)); Text("Dark Mode"); Spacer(Modifier.weight(1f)); Switch(checked = false, onCheckedChange = {}) } }
         Spacer(Modifier.height(16.dp))
+        // FAST POPULATE ALL COLLECTIONS - 1 CLICK
+        Button(
+            onClick = {
+                val db = FirebaseFirestore.getInstance()
+                db.collection("services").document("SVC001").set(mapOf("service_id" to "SVC001", "name" to "Library", "description" to "Study spaces and books", "location" to "Main Campus Building A", "operating_hours" to "08:00-17:00"))
+                db.collection("services").document("SVC002").set(mapOf("service_id" to "SVC002", "name" to "Computer Lab", "description" to "IT Hub", "location" to "Building B", "operating_hours" to "07:00-18:00"))
+                db.collection("events").document("EVT001").set(mapOf("event_id" to "EVT001", "title" to "Career Fair", "description" to "Meet top employers", "venue" to "Main Hall", "event_date" to "2025-08-28"))
+                db.collection("transport").document("R001").set(mapOf("route_id" to "R001", "route_name" to "Campus Shuttle", "pickup_point" to "Rosebank Station", "destination" to "Main Campus", "schedule" to "Every 30 mins"))
+                db.collection("modules").document("MOD001").set(mapOf("module_id" to "MOD001", "module_name" to "Open Source Programming", "module_code" to "OPSC6312"))
+                db.collection("classes").document("CLS001").set(mapOf("class_id" to "CLS001", "user_id" to "ST10172741", "module_id" to "MOD001", "venue" to "T401 ROOM 422", "date" to "2025-08-21", "start_time" to "08:00", "end_time" to "10:00"))
+                db.collection("assignments").document("ASS001").set(mapOf("assignment_id" to "ASS001", "user_id" to "ST10172741", "module_id" to "MOD001", "title" to "Database POE", "description" to "Part 3 NoSQL", "due_date" to "2025-08-25", "priority" to "high", "completed" to false))
+                db.collection("exams").document("EX001").set(mapOf("exam_id" to "EX001", "user_id" to "ST10172741", "module_id" to "MOD001", "date" to "2025-09-15"))
+                db.collection("resources").document("RES001").set(mapOf("resource_id" to "RES001", "module_id" to "MOD001", "title" to "POE Part 1 Document", "type" to "pdf", "location" to "resources/OPSC6312.pdf"))
+                db.collection("notifications").document("NOT001").set(mapOf("notification_id" to "NOT001", "user_id" to "ST10172741", "title" to "Assignment Due", "message" to "Database POE due in 2 days", "created_at" to "2025-08-25"))
+                db.collection("users").document("ST10172741").set(mapOf("user_id" to "ST10172741", "first_name" to "Keoagile", "surname" to "Letlape", "student_number" to "ST10172741", "email" to "ST10172741@iiemail.com", "created_at" to "2025-08-25"))
+            },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
+        ) { Text("POPULATE ALL COLLECTIONS (1 click)") }
+        Spacer(modifier = Modifier.height(12.dp))
+
         OutlinedButton(onClick = onLogout, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) { Icon(Icons.Default.Logout, null, tint = Color.Red); Spacer(Modifier.width(8.dp)); Text("LOG OUT", color = Color.Red) }
         Spacer(Modifier.height(12.dp))
         Text("Project: campusconnectsa-3880d | NoSQL Firestore | Blob Storage | Auth bcrypt encrypted", fontSize = 10.sp, color = Color.Gray, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
