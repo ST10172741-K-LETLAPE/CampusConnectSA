@@ -853,45 +853,338 @@ fun HomeDashboardScreen(
 
 @Composable
 fun AcademicPlannerScreen() {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(CampusBackground)
+            .background(Color.White)
             .padding(16.dp)
     ) {
-        Text(
-            text = "ACADEMIC PLANNER",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                Modifier.padding(12.dp)
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "TODAY - WED, 21 AUG 2024",
-                    fontSize = 10.sp,
-                    color = CampusBlue,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "08:00 Programming - T401 ROOM 422",
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = "10:00 Database - LAB 3",
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = "12:00 Web Development - T401",
-                    fontSize = 12.sp
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.Menu,
+                        contentDescription = null
+                    )
+                    Spacer(
+                        modifier = Modifier.width(8.dp)
+                    )
+                    Column {
+                        Text(
+                            text = "ACADEMIC",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = CampusBlue
+                        )
+                        Text(
+                            text = "PLANNER",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = CampusBlue
+                        )
+                        Text(
+                            text = "CampusConnect SA - Semester 2, 2024",
+                            fontSize = 9.sp,
+                            color = Color.Gray
+                        )
+                    }
+                }
+                Icon(
+                    Icons.Default.CalendarToday,
+                    contentDescription = null
                 )
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                val days = listOf(
+                    "MON\n19",
+                    "TUE\n20",
+                    "WED\n21",
+                    "THU\n22",
+                    "FRI\n23"
+                )
+                days.forEachIndexed { index, day ->
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (index == 2) {
+                                CampusBlue
+                            } else {
+                                Color(0xFFF1F5F9)
+                            }
+                        ),
+                        modifier = Modifier.padding(2.dp)
+                    ) {
+                        Text(
+                            text = day,
+                            modifier = Modifier.padding(
+                                horizontal = 12.dp,
+                                vertical = 6.dp
+                            ),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (index == 2) {
+                                Color.White
+                            } else {
+                                Color.Black
+                            },
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "TODAY - WED, 21 AUG 2024",
+                fontSize = 10.sp,
+                color = CampusBlue,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.CalendarMonth,
+                    contentDescription = null,
+                    tint = CampusBlue,
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "SCHEDULE",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Card(
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                elevation = CardDefaults.cardElevation(2.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Row(
+                    Modifier.padding(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(4.dp)
+                            .height(40.dp)
+                            .background(
+                                CampusBlue,
+                                RoundedCornerShape(2.dp)
+                            )
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(
+                            text = "08:00  Programming",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = "Thu 22 Aug - Lab - Room B12 - Prof. Jacobs",
+                            fontSize = 9.sp,
+                            color = Color.Gray
+                        )
+                    }
+                }
+            }
+
+            Card(
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                elevation = CardDefaults.cardElevation(2.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Row(
+                    Modifier.padding(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(4.dp)
+                            .height(40.dp)
+                            .background(
+                                CampusBlue,
+                                RoundedCornerShape(2.dp)
+                            )
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(
+                            text = "10:00  Database",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = "Lecture - Room C03 - Prof. Mokoena",
+                            fontSize = 9.sp,
+                            color = Color.Gray
+                        )
+                    }
+                }
+            }
+
+            Card(
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                elevation = CardDefaults.cardElevation(2.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Row(
+                    Modifier.padding(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(4.dp)
+                            .height(40.dp)
+                            .background(
+                                CampusBlue,
+                                RoundedCornerShape(2.dp)
+                            )
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(
+                            text = "13:00  Web Development",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = "Workshop - Lab D1 - Ms. van Wyk",
+                            fontSize = 9.sp,
+                            color = Color.Gray
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.List,
+                    contentDescription = null,
+                    tint = CampusBlue,
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "ASSIGNMENTS",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "• Submit DB Assignment - Due Fri, 23 Aug  Due in 2 days",
+                fontSize = 10.sp,
+                color = Color.Gray
+            )
+            Text(
+                text = "• Web Dev Project  Draft due Tue, 27 Aug  Pending",
+                fontSize = 10.sp,
+                color = Color.Gray
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.School,
+                    contentDescription = null,
+                    tint = CampusBlue,
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "TESTS / EXAMS",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Programming Quiz  Thu 22 Aug - 10:00  Room A05 - 30 min",
+                fontSize = 10.sp
+            )
+            Text(
+                text = "Database Test  Fri 23 Aug - 14:00  Hall 3 - 60 min",
+                fontSize = 10.sp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.BottomEnd
+            ) {
+                Button(
+                    onClick = {},
+                    shape = RoundedCornerShape(20.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = CampusBlue
+                    )
+                ) {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "ADD",
+                        fontSize = 12.sp
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Purpose: Allows students to view academic activities.",
+                fontSize = 10.sp,
+                color = CampusBlue,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
