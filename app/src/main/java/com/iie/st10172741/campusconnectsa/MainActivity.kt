@@ -1195,8 +1195,13 @@ fun CampusServicesScreen(
     services: List<CampusService>
 ) {
     var showTransport by remember { mutableStateOf(false) }
+    var showSafety by remember { mutableStateOf(false) }
     if (showTransport) {
         CampusTransportScreen(onBack = { showTransport = false })
+        return
+    }
+    if (showSafety) {
+        CampusSafetyScreen(onBack = { showSafety = false })
         return
     }
     LazyColumn(
@@ -1320,7 +1325,8 @@ fun CampusServicesScreen(
             CampusServiceCard(
                 icon = "🛡️",
                 title = "Campus Security",
-                subtitle = "24/7 - Emergency: 10111"
+                subtitle = "24/7 - Emergency: 10111",
+                onClick = { showSafety = true }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -1943,6 +1949,314 @@ fun CampusTransportScreen(
                     fontWeight = FontWeight.Medium
                 )
             }
+        }
+    }
+}
+
+
+@Composable
+fun CampusSafetyScreen(
+    onBack: () -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF8FAFC))
+    ) {
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(CampusBlue)
+                    .padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = onBack,
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Menu,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "CAMPUS SAFETY",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        Icons.Default.Notifications,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        Icons.Default.Shield,
+                        contentDescription = null,
+                        tint = CampusBlue,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "CampusConnect SA\nSafe Campus Initiative",
+                        fontSize = 9.sp,
+                        color = Color.Gray,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFDC2626)
+                    ),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {}
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .background(Color.White, RoundedCornerShape(50))
+                                .padding(6.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.Call,
+                                contentDescription = null,
+                                tint = Color(0xFFDC2626)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column {
+                            Text(
+                                text = "EMERGENCY CALL",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp,
+                                color = Color.White
+                            )
+                            Text(
+                                text = "SECURITY",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp,
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+
+                Text(
+                    text = "For immediate assistance • 24/7 Security",
+                    fontSize = 9.sp,
+                    color = Color.Gray,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFDBEAFE)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        Modifier.padding(12.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Security Office",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Icon(
+                                Icons.Default.Shield,
+                                contentDescription = null,
+                                tint = CampusBlue,
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Phone,
+                                contentDescription = null,
+                                tint = Color.Gray,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "021 555 1234 • Tap to call",
+                                fontSize = 10.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.LocationOn,
+                                contentDescription = null,
+                                tint = Color.Gray,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "Admin Building, Ground Floor • Open 08:00-22:00",
+                                fontSize = 10.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Email,
+                                contentDescription = null,
+                                tint = Color.Gray,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "security@campusconnect.co.za",
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "SAFETY INFORMATION",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 11.sp
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        Icons.Default.Shield,
+                        contentDescription = null,
+                        tint = CampusBlue,
+                        modifier = Modifier.size(14.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                SafetyInfoCard(
+                    icon = "⚠️",
+                    title = "Emergency procedures",
+                    subtitle = "Evacuation, lockdown & first steps"
+                )
+                SafetyInfoCard(
+                    icon = "🚶",
+                    title = "Safe walking routes",
+                    subtitle = "Well-lit paths & campus escort service"
+                )
+                SafetyInfoCard(
+                    icon = "📝",
+                    title = "Report an incident",
+                    subtitle = "Submit anonymously & with contact details"
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    text = "Purpose: Provides quick access to safety information.\n4.9 Campus Safety Screen - Firestore: notifications, services\nProject: campusconnectsa-3880d",
+                    fontSize = 9.sp,
+                    color = CampusBlue,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SafetyInfoCard(
+    icon: String,
+    title: String,
+    subtitle: String
+) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(2.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        onClick = {}
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(Color(0xFFFEF3C7), RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = icon, fontSize = 16.sp)
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp
+                )
+                Text(
+                    text = subtitle,
+                    fontSize = 10.sp,
+                    color = Color.Gray
+                )
+            }
+            Icon(
+                Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = Color.Gray,
+                modifier = Modifier.size(18.dp)
+            )
         }
     }
 }
