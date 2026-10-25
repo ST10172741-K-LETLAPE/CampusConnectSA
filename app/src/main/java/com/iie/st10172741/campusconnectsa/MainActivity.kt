@@ -687,7 +687,7 @@ fun MainAppWithBottomNav(
                 0 -> HomeDashboardScreen(announcements)
                 1 -> AcademicPlannerScreen()
                 2 -> CampusServicesScreen(services)
-                3 -> AnnouncementsScreen(announcements)
+                3 -> NotificationsScreen(announcements)
                 4 -> SettingsScreen(onLogout)
             }
         }
@@ -2318,6 +2318,245 @@ fun SafetyInfoCard(
                 tint = Color.Gray,
                 modifier = Modifier.size(18.dp)
             )
+        }
+    }
+}
+
+
+@Composable
+fun NotificationsScreen(
+    announcements: List<Announcement>
+) {
+    var showAnnouncements by remember { mutableStateOf(false) }
+    if (showAnnouncements) {
+        AnnouncementsScreen(announcements)
+        return
+    }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp)
+    ) {
+        item {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = CampusBlue
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "NOTIFICATIONS",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Card(
+                    shape = RoundedCornerShape(6.dp),
+                    colors = CardDefaults.cardColors(containerColor = CampusBlue)
+                ) {
+                    Text(
+                        text = "CC",
+                        color = Color.White,
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "CampusConnect SA",
+                    fontSize = 11.sp,
+                    color = CampusBlue
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    Icons.Default.MoreHoriz,
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Today • 3 new",
+                    fontSize = 10.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "Mark all as read",
+                    fontSize = 10.sp,
+                    color = CampusBlue,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = { showAnnouncements = true },
+                    shape = RoundedCornerShape(20.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = CampusBlue),
+                    modifier = Modifier.height(32.dp),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+                ) {
+                    Text(text = "View 4.10 Announcements", fontSize = 10.sp)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        // Firestore live notifications if any
+        if (announcements.isNotEmpty()) {
+            items(announcements.take(3)) { a ->
+                NotificationCardFigma(
+                    icon = "🔔",
+                    iconBg = Color(0xFFDBEAFE),
+                    title = a.title,
+                    subtitle = a.content.take(40),
+                    time = "Just now",
+                    chipText = "FIRESTORE",
+                    chipColor = CampusBlue
+                )
+            }
+        }
+
+        item {
+            NotificationCardFigma(
+                icon = "📝",
+                iconBg = Color(0xFFFEE2E2),
+                title = "Assignment Reminder",
+                subtitle = "Database POE due tomorrow\nDue tomorrow - 23:59 • Databases 302",
+                time = "2h ago",
+                chipText = "URGENT",
+                chipColor = Color(0xFFDC2626)
+            )
+            NotificationCardFigma(
+                icon = "🔊",
+                iconBg = Color(0xFFDBEAFE),
+                title = "New Announcement",
+                subtitle = "Campus registration info\nJust now - 09:12 • Student Affairs",
+                time = "Just now",
+                chipText = "CAMPUS",
+                chipColor = Color(0xFF2563EB)
+            )
+            NotificationCardFigma(
+                icon = "📅",
+                iconBg = Color(0xFFD1FAE5),
+                title = "Event Reminder",
+                subtitle = "Career tomorrow\nTomorrow - 10:00 • Main Hall, Student Centre",
+                time = "5h ago",
+                chipText = "EVENT",
+                chipColor = Color(0xFF10B981)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Purpose: Displays real-time notifications received by the student.\n4.11 Notifications Screen - Firestore: notifications collection\nReal-time Firestore listener - NoSQL + Auth bcrypt",
+                fontSize = 9.sp,
+                color = CampusBlue,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+}
+
+@Composable
+fun NotificationCardFigma(
+    icon: String,
+    iconBg: Color,
+    title: String,
+    subtitle: String,
+    time: String,
+    chipText: String,
+    chipColor: Color
+) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(3.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        onClick = {}
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .background(iconBg, RoundedCornerShape(50)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = icon, fontSize = 12.sp)
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 11.sp
+                    )
+                    Text(
+                        text = subtitle.split("\n")[0],
+                        fontSize = 9.sp,
+                        color = Color.Gray
+                    )
+                }
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    colors = CardDefaults.cardColors(containerColor = iconBg)
+                ) {
+                    Text(
+                        text = chipText,
+                        fontSize = 7.sp,
+                        color = chipColor,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = Modifier.width(36.dp))
+                Text(
+                    text = subtitle.split("\n").getOrElse(1) { "" },
+                    fontSize = 9.sp,
+                    color = Color.Gray
+                )
+            }
         }
     }
 }
