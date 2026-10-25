@@ -1492,141 +1492,202 @@ fun AnnouncementsScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(CampusBackground)
+            .background(Color.White)
             .padding(16.dp)
     ) {
         item {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Card(
-                    shape = RoundedCornerShape(6.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = CampusBlue
-                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "CC",
-                        color = Color.White,
-                        modifier = Modifier.padding(4.dp),
-                        fontSize = 10.sp
-                    )
+                    Card(
+                        shape = RoundedCornerShape(6.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = CampusBlue
+                        )
+                    ) {
+                        Text(
+                            text = "CC",
+                            color = Color.White,
+                            modifier = Modifier.padding(
+                                horizontal = 6.dp,
+                                vertical = 2.dp
+                            ),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Column {
+                        Text(
+                            text = "CampusConnect SA",
+                            color = CampusBlue,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "ROSEBANK",
+                            fontSize = 8.sp,
+                            color = Color.Gray
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "CampusConnect SA",
-                    color = CampusBlue,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
+                Icon(
+                    Icons.Default.AccountCircle,
+                    contentDescription = null,
+                    tint = CampusBlue,
+                    modifier = Modifier.size(24.dp)
                 )
             }
-            Spacer(modifier = Modifier.height(12.dp))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = "ANNOUNCEMENTS",
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                color = Color.Black
             )
             Text(
                 text = "Stay updated with the latest campus news - 3 new updates",
-                fontSize = 11.sp,
+                fontSize = 10.sp,
                 color = Color.Gray
             )
+
             Spacer(modifier = Modifier.height(12.dp))
         }
-        if (announcements.isEmpty()) {
-            item {
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 6.dp)
-                ) {
-                    Column(
-                        Modifier.padding(12.dp)
-                    ) {
-                        Text(
-                            text = "Registration closes Friday",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
-                        Text(
-                            text = "Final registration for Semester 2 closes on 21 Aug 2025 17:00",
-                            fontSize = 11.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 6.dp)
-                ) {
-                    Column(
-                        Modifier.padding(12.dp)
-                    ) {
-                        Text(
-                            text = "Test timetable updated",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
-                        Text(
-                            text = "Updated test schedule now available for Engineering Dept - View details",
-                            fontSize = 11.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 6.dp)
-                ) {
-                    Column(
-                        Modifier.padding(12.dp)
-                    ) {
-                        Text(
-                            text = "Career Fair next week",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
-                        Text(
-                            text = "Meet top employers on campus - 28 Aug - 10:00-16:00 - Main Hall",
-                            fontSize = 11.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
-            }
-        } else {
+
+        // Firestore announcements if available
+        if (announcements.isNotEmpty()) {
             items(announcements) { a ->
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 6.dp),
-                    elevation = CardDefaults.cardElevation(2.dp)
-                ) {
-                    Column(
-                        Modifier.padding(12.dp)
-                    ) {
-                        Text(
-                            text = a.title,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 13.sp
-                        )
-                        Text(
-                            text = a.content,
-                            fontSize = 11.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
+                AnnouncementCardFigma(
+                    dotColor = CampusBlue,
+                    chipText = "Firestore",
+                    chipColor = CampusBlue,
+                    title = a.title,
+                    subtitle = a.content
+                )
             }
+        }
+
+        // Figma static 3 cards - matching screenshot exactly
+        item {
+            AnnouncementCardFigma(
+                dotColor = Color(0xFFDC2626),
+                chipText = "IMPORTANT",
+                chipColor = Color(0xFFDC2626),
+                title = "Registration closes Friday",
+                subtitle = "Final registration for Semester 2 closes on\n23 Aug 2025 - 17:00"
+            )
+            AnnouncementCardFigma(
+                dotColor = Color(0xFF2563EB),
+                chipText = "Academic Notice",
+                chipColor = Color(0xFF2563EB),
+                title = "Test timetable updated",
+                subtitle = "Updated test schedule now available for\nEngineering Dept - View details"
+            )
+            AnnouncementCardFigma(
+                dotColor = Color(0xFF10B981),
+                chipText = "Campus Event",
+                chipColor = Color(0xFF10B981),
+                title = "Career Fair next week",
+                subtitle = "Meet top companies on campus - 28 Aug -\n10:00-16:00 - Sports Hall"
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Purpose: Displays important campus announcements.\n4.10 Announcements Screen - Firestore: announcements collection\nShows ${announcements.size} live + 3 Figma cards | NoSQL Firestore",
+                fontSize = 9.sp,
+                color = CampusBlue,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
+
+@Composable
+fun AnnouncementCardFigma(
+    dotColor: Color,
+    chipText: String,
+    chipColor: Color,
+    title: String,
+    subtitle: String
+) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(3.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        onClick = {}
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .background(dotColor, RoundedCornerShape(50))
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFFF1F2)
+                    )
+                ) {
+                    Text(
+                        text = chipText,
+                        fontSize = 8.sp,
+                        color = chipColor,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(
+                            horizontal = 6.dp,
+                            vertical = 2.dp
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    Icons.Default.ChevronRight,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(14.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp,
+                color = Color.Black
+            )
+
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Text(
+                text = subtitle,
+                fontSize = 10.sp,
+                color = Color.Gray,
+                lineHeight = 14.sp
+            )
+        }
+    }
+}
+
 
 
 
